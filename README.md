@@ -25,3 +25,7 @@ The project uses the [Microcord plugin template](https://github.com/microcord/pl
 ```
 
 On macOS or Linux, use `bash ./gradlew testDebugUnitTest assembleDebug`. The debug APK is written under `build/outputs/apk/debug/`. For a distributable release signed with your own key, set up the ignored `keystore.properties` using the example and run `assembleRelease`. Android requires the same signing key for an in-place update.
+
+## License
+
+Active Now plugin code is licensed under the [MIT License](LICENSE). The Gradle Wrapper retains its upstream license and notices.
