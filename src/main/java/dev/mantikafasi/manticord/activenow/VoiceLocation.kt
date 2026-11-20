@@ -15,16 +15,20 @@ import com.discord.utilities.permissions.PermissionUtils
 import rx.Observable
 
 internal data class VoiceLocation(
+    val guildId: Long,
+    val channelId: Long,
     val channelName: String?,
     val serverName: String?,
     val summary: String,
     val fallbackName: String,
+    val canJoin: Boolean,
 )
 
 internal class VoiceDirectory {
     val states = StoreStream.getVoiceStates()
     val channels = StoreStream.getChannels()
     val permissions = StoreStream.getPermissions()
+    val relationships = StoreStream.getUserRelationships()
     private val guilds = StoreStream.getGuilds()
 
     fun resolve(guildId: Long, channelId: Long): VoiceLocation? {
@@ -35,18 +39,20 @@ internal class VoiceDirectory {
             guilds.getGuilds()[guildId]?.name,
         )
     }
+
+    fun profileLocation(userId: Long, preferredGuildId: Long?): VoiceLocation? {
+        if (relationships.isBlockedOrIgnored(userId)) return null
+        return findVoiceLocation(userId, preferredGuildId, states.get(), ::resolve)
+    }
 }
 
 internal fun observeProfileVoice(userId: Long, preferredGuildId: Long?): Observable<VoiceLocation?> {
     val voice = VoiceDirectory()
-    val relationships = StoreStream.getUserRelationships()
     return ObservationDeckProvider.get().connectRx(
-        voice.states, voice.channels, voice.permissions, StoreGuilds.GuildsUpdate, relationships,
+        voice.states, voice.channels, voice.permissions, StoreGuilds.GuildsUpdate, voice.relationships,
         observerName = "Active Now profile voice",
     ) {
-        if (relationships.isBlockedOrIgnored(userId)) null else findVoiceLocation(
-            userId, preferredGuildId, voice.states.get(), voice::resolve,
-        )
+        voice.profileLocation(userId, preferredGuildId)
     }.distinctUntilChanged()
 }
 
@@ -66,10 +72,15 @@ internal fun findVoiceLocation(
 internal fun describeVoice(channel: Channel, permissions: Long?, guildName: String?): VoiceLocation? {
     if (channel.guildId == StoreVoiceStates.PRIVATE_CHANNELS_GUILD_ID) {
         return when {
-            channel.isDM() -> VoiceLocation(null, null, "In a DM call", "Direct message call")
+            channel.isDM() -> VoiceLocation(
+                channel.guildId, channel.id, null, null, "In a DM call", "Direct message call", canJoin = true,
+            )
             channel.isGroup() -> {
                 val name = channel.getDisplayName().takeIf(String::isNotBlank)
-                VoiceLocation(name, null, name?.let { "In call · $it" } ?: "In a group call", "Group call")
+                VoiceLocation(
+                    channel.guildId, channel.id, name, null,
+                    name?.let { "In call · $it" } ?: "In a group call", "Group call", canJoin = true,
+                )
             }
             else -> null
         }
@@ -79,5 +90,8 @@ internal fun describeVoice(channel: Channel, permissions: Long?, guildName: Stri
     val serverName = guildName?.takeIf(String::isNotBlank)
     val summary = if (channelName == null) "In voice" else
         listOfNotNull("In voice", channelName, serverName).joinToString(" · ")
-    return VoiceLocation(channelName, serverName, summary, "Voice channel")
+    return VoiceLocation(
+        channel.guildId, channel.id, channelName, serverName, summary, "Voice channel",
+        canJoin = PermissionUtils.can(Permission.CONNECT, permissions),
+    )
 }

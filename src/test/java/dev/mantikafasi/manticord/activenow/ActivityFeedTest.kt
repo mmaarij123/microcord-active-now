@@ -10,7 +10,9 @@ import com.discord.models.domain.ModelUserRelationship
 import com.discord.models.presence.Presence
 import com.discord.models.user.CoreUser
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ActivityFeedTest {
@@ -86,6 +88,20 @@ class ActivityFeedTest {
             "In call · Study group",
             describeVoice(channel(Channel.GROUP_DM, 0, "Study group"), null, null)?.summary,
         )
+    }
+
+    @Test
+    fun profileVoiceActionsUseChannelAndServerIdsAndRespectConnectPermission() {
+        val voice = channel(Channel.GUILD_VOICE, 8, "Lobby")
+        val visible = requireNotNull(describeVoice(voice, Permission.VIEW_CHANNEL, "Community"))
+        assertEquals(voice.id, visible.channelId)
+        assertEquals(8L, visible.guildId)
+        assertFalse(visible.canJoin)
+
+        val joinable = requireNotNull(describeVoice(voice, Permission.VIEW_CHANNEL or Permission.CONNECT, "Community"))
+        assertTrue(joinable.canJoin)
+        assertTrue(requireNotNull(describeVoice(channel(Channel.DM, 0, null), null, null)).canJoin)
+        assertNull(describeVoice(voice, Permission.CONNECT, "Community"))
     }
 
     @Test

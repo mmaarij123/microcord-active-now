@@ -2,7 +2,7 @@
 
 Active Now adds a carousel between the **Direct Messages** search box and conversation list. It shows friends in a visible voice channel or known DM call, friends sharing an activity, and friends who are Online, Idle, or Do Not Disturb. Swipe or use the arrow buttons to browse, then tap a card to open the friend's profile.
 
-Profiles show an **In voice** card with the current channel and server when that voice state is available to your account. The card updates while the profile is open. Both surfaces use Microcord's Discord typography, and the profile card follows the profile's resolved palette.
+Profiles show an **In voice** card with the current channel and server when that voice state is available to your account. Tap **Join VC** to enter a call you can join, or tap the server name to open that server. The card updates while the profile is open. Both surfaces use Microcord's Discord typography, and the profile card follows the profile's resolved palette.
 
 The row updates from Microcord's existing stores and hides when there are no matching friends. Voice coverage depends on channel visibility and the call data available to the current account. Activity coverage depends on the presence a friend shares.
 
