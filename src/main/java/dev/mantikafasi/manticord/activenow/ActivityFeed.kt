@@ -16,7 +16,7 @@ import rx.Observable
 internal data class FriendActivity(
     val user: User,
     val name: String,
-    val voice: String?,
+    val voice: VoiceLocation?,
     val activity: String?,
     val status: ClientStatus?,
 )
@@ -42,9 +42,8 @@ internal fun observeFeed(): Observable<List<FriendActivity>> {
                 users.getUsers(),
                 presence.getPresences(),
                 voice.states.get(),
-            ) { guildId, channelId ->
-                voice.resolve(guildId, channelId)?.summary
-            }
+                voice::resolve,
+            )
         }
     }.distinctUntilChanged()
 }
@@ -56,14 +55,14 @@ internal fun collectActivities(
     users: Map<Long, User>,
     presences: Map<Long, Presence>,
     voiceStates: Map<Long, Map<Long, VoiceState>>,
-    describeChannel: (guildId: Long, channelId: Long) -> String?,
+    describeChannel: (guildId: Long, channelId: Long) -> VoiceLocation?,
 ): List<FriendActivity> {
     val friends = relationships.keys.filterTo(HashSet()) {
         relationships[it] == ModelUserRelationship.TYPE_FRIEND && it !in ignored && it in users
     }
     if (friends.isEmpty()) return emptyList()
 
-    val voiceByFriend = mutableMapOf<Long, String>()
+    val voiceByFriend = mutableMapOf<Long, VoiceLocation>()
     // The private-call bucket (0) comes first when the host knows of more than one session.
     for ((guildId, states) in voiceStates.toSortedMap()) {
         val candidates = if (friends.size < states.size) friends else states.keys

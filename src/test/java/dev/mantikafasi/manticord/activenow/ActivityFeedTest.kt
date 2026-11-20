@@ -32,15 +32,15 @@ class ActivityFeedTest {
             mapOf(1L to playing, 2L to listening, 4L to playing, 5L to playing), voiceStates,
         ) { _, channelId ->
             when (channelId) {
-                10L -> "In a DM call"
-                21L -> "In voice · Lobby"
+                10L -> describeVoice(channel(Channel.DM, 0, null), null, null)
+                21L -> describeVoice(channel(Channel.GUILD_VOICE, 8, "Lobby"), Permission.VIEW_CHANNEL, null)
                 else -> null
             }
         }
 
         assertEquals(listOf(2L, 1L), entries.map { it.user.id })
         assertEquals("Sam", entries[0].name)
-        assertEquals("In a DM call", entries[0].voice)
+        assertEquals("In a DM call", entries[0].voice?.summary)
         assertEquals("Listening to Song", entries[0].activity)
         assertNull(entries[1].voice)
         assertEquals("Playing Minecraft", entries[1].activity)

@@ -133,7 +133,7 @@ class ActiveNowPlugin : ManticordPlugin, Application.ActivityLifecycleCallbacks 
             val params = AppBarLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                 scrollFlags = 0
             }
-            appBar.addView(section, appBar.indexOfChild(header), params)
+            appBar.addView(section, appBar.indexOfChild(header) + 1, params)
             sections[fragment] = section
             section.connect()
         }.onFailure {
