@@ -12,7 +12,7 @@ val releaseSigning = Properties().apply {
 
 manticordPlugin {
     id.set("dev.mantikafasi.manticord.activenow")
-    entrypoint.set("dev.mantikafasi.manticord.activenow.ActiveNowPlugin")
+    entrypoint.set("io.github.mmaarij123.activenow.ActiveNowPlugin")
     description.set("Shows active friends above your DMs and live voice channels on profiles")
     manticordVersionMinimum.set(3)
     manticordVersionMaximumExclusive.set(4)
@@ -20,7 +20,7 @@ manticordPlugin {
 }
 
 android {
-    namespace = "dev.mantikafasi.manticord.activenow"
+    namespace = "io.github.mmaarij123.activenow"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -28,11 +28,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "dev.mantikafasi.manticord.activenow"
+        applicationId = "io.github.mmaarij123.activenow"
         minSdk = 23
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.4.0"
+        versionCode = 6
+        versionName = "1.4.1"
     }
 
     signingConfigs {

@@ -1,4 +1,4 @@
-package dev.mantikafasi.manticord.activenow
+package io.github.mmaarij123.activenow
 
 import android.content.Context
 import android.graphics.Typeface

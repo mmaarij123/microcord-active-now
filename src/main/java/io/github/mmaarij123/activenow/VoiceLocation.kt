@@ -1,4 +1,4 @@
-package dev.mantikafasi.manticord.activenow
+package io.github.mmaarij123.activenow
 
 import com.discord.api.channel.Channel
 import com.discord.api.channel.getDisplayName

@@ -1,4 +1,4 @@
-package dev.mantikafasi.manticord.activenow
+package io.github.mmaarij123.activenow
 
 import android.app.Activity
 import android.app.Application

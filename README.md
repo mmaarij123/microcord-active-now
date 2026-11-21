@@ -12,7 +12,7 @@ The row updates from Microcord's existing stores and hides when there are no mat
 2. In Microcord, open **Settings → Plugins** and enable **Active Now**. Confirm the plugin signer when prompted.
 3. Open the **Direct Messages** sidebar. The carousel appears below search when a friend has a visible online status, is sharing an activity, or is in a voice channel or call that Microcord can see.
 
-If an earlier Active Now APK with the same signer is installed, Android can update it in place.
+If you have Active Now 1.4.0 or older, uninstall the old **Active Now** APK before installing 1.4.1. The new Android package is `io.github.mmaarij123.activenow`. Later updates to this package can install in place when signed with the same key.
 
 Use a Microcord build with plugin API level 3 or newer. This plugin uses the sidebar and store classes in the 1.0.6 SDK, so a Microcord update that changes those internals may require a plugin update.
 
