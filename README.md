@@ -41,4 +41,6 @@ The debug APK is written to `build/outputs/apk/debug/`. For a signed release bui
 
 ## License
 
-Active Now plugin code is licensed under the [MIT License](LICENSE). The Gradle Wrapper retains its upstream license and notices.
+The original Active Now plugin code is licensed under MIT. Copyright © 2026 Maarij. You may use, copy, modify, and redistribute the code, including for commercial use. Include the copyright notice and permission notice with copies or substantial portions of the code. The code is provided as is, without warranty. The full terms include a limitation of liability. [Read the MIT license](LICENSE)
+
+See the notices for the host-provided libraries, artwork displayed by the plugin, and the Gradle Wrapper. [Third-party notices](THIRD_PARTY_NOTICES.md)
